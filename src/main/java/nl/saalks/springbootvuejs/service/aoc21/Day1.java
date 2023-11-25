@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static nl.saalks.springbootvuejs.service.AdventOfCode.computeSlidingWindow;
-import static nl.saalks.springbootvuejs.service.AdventOfCode.convertStringListToIntList;
+import static nl.saalks.springbootvuejs.service.AdventOfCode.convertObjectsList;
 
 @Service
 public class Day1 implements AdventOfCode {
@@ -77,7 +77,7 @@ public class Day1 implements AdventOfCode {
 
         LOG.info("sonarSweepStream - total lines: " + depthReport.size());
 
-        List<Integer> intDepthReport = convertStringListToIntList(depthReport, Integer::parseInt);
+        List<Integer> intDepthReport = convertObjectsList(depthReport, Integer::parseInt);
 
         int timesIncreased = computeSlidingWindow(intDepthReport, 1);  //Part 1
 //        int valuePart2 = compute(intDepthReport, 3); //Part 2

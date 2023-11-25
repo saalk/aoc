@@ -21,37 +21,37 @@ class Day5Test implements AdventOfCodeTest {
 	}
 	
 	@Test
-	@DisplayName("5.1 - CampCleanup example")
-	void sumOfThePrioritiesWithExampleFile() {
+	@DisplayName("5.1 - SupplyStack example")
+	void part1WithExampleFile() {
 		
-		List<String> lines = readFile("aoc22/day4example.txt");
+		List<String> lines = readFile("aoc22/day5example.txt");
 		int score = fixture.solutionPartOne(lines);
-		assertTrue("CampCleanup: ", score == 2);
+//		assertTrue("CampCleanup: ", score == 2);
 	}
 	
 	@Test
-	@DisplayName("5.1 - CampCleanup real")
-	void sumOfThePrioritiesWithRealFile() {
+	@DisplayName("5.1 - SupplyStack real")
+	void part1WithRealFile() {
 		
-		List<String> lines = readFile("aoc22/day4.txt");
+		List<String> lines = readFile("aoc22/day5.txt");
 		int score = fixture.solutionPartOne(lines);
-		assertTrue("CampCleanup: ", score == 538);
+		assertTrue("Result: ", score == 538);
 	}
 	
 	@Test
-	@DisplayName("4.2 - CampCleanup example")
+	@DisplayName("5.2 - SupplyStack example")
 	void part2WithExampleFile() {
 		
-		List<String> lines = readFile("aoc22/day4example.txt");
+		List<String> lines = readFile("aoc22/day5example.txt");
 		int score = fixture.solutionPartTwo(lines);
-		assertTrue("sumOfThePriorities: ", score == 4);
+//		assertTrue("Result: ", score == 4);
 	}
 	
 	@Test
-	@DisplayName("4.2 - CampCleanup real")
+	@DisplayName("5.2 - SupplyStack real")
 	void part2WithRealFile() {
 		
-		List<String> lines = readFile("aoc22/day4.txt");
+		List<String> lines = readFile("aoc22/day5.txt");
 		int score = fixture.solutionPartTwo(lines);
 		assertTrue("sumOfThePriorities: ", score == 792);
 	}

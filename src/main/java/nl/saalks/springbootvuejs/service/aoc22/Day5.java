@@ -4,6 +4,9 @@ import nl.saalks.springbootvuejs.service.AdventOfCode;
 
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -12,84 +15,116 @@ import java.util.stream.Collectors;
 public class Day5 implements AdventOfCode {
 	
 	/**
-	 * Day 3
-	 * Each rucksack has two large compartments. All items of a given type are meant to go into
-	 * exactly one of the two compartments.
-	 * Find the item type that appears in both compartments of each rucksack.
-	 * What is the sum of the priorities of those item types?
-	 *
-	 * @param rucksacksContents the lines eg "vJrwpWtwJgWrhcsFMMfFFhFp" first and second half are
-	 * compartments
-	 * @return sumOfThePriorities
+	 Day 5
+	     [D]
+	 [N] [C]
+	 [Z] [M] [P]
+	  1   2   3
+
+	 move 1 from 2 to 1
+	 move 3 from 1 to 3
+	 move 2 from 2 to 1
+	 move 1 from 1 to 2
+	 * result => cratesOnTop eg CMZ
 	 */
-	
-	static String title = "CampCleanup - part 1: ";
+
+	class Move {
+		int quantity;
+		int fromStack;
+		int toStack;
+		Move(String line){
+			List<String> words = Pattern
+					.compile(" ")
+					.splitAsStream(line)
+					.collect(Collectors.toList());
+			quantity = Integer.parseInt(words.get(1));
+			fromStack = Integer.parseInt(words.get(3));
+			toStack = Integer.parseInt(words.get(5));
+		}
+	}
+	class Pile {
+		int pile; // 1 = left column
+		String crates;
+		Pile(int pile, String crates){
+			pile = pile;
+			crates = crates;
+		}
+		void addCrate(String crate) {
+			crates.concat(crate);
+		}
+	}
+	static String title = "SupplyStack - part 1: ";
 	
 	public int solutionPartOne(List<String> lines) {
-		
-		LOG.info(title + "lines: " + lines.size() + lineSeparator);
-		
-		int sum = 0;
-		for (String line : lines) {
-			// split logic
-			List<String> split = Pattern
-					                     .compile(",")
-					                     .splitAsStream(line)
-					                     .collect(Collectors.toList());
-			sum += fullyContainsOther(split);
-			LOG.info(title + "cumulative: " + sum + lineSeparator);
-		}
-		LOG.info("answer: " + sum);
-		return sum;
-	}
-	
-	public int fullyContainsOther(List<String> sectionRanges) {
-		String first = sectionRanges.get(0);
-		String second = sectionRanges.get(1);
-		LOG.info(title + "first : [" + first + "] second: [" + second +
-				         "]");
 
-		int result = fullyContains(convertSection(first), convertSection(second));
-		if (result == 0) {
-			result = fullyContains(convertSection(second), convertSection(first));
-			if (result == 0 ){
-				return 0;
+		// process all lines
+		int count = 0;
+		int totalPiles = 0;
+		boolean processStacks = true;
+		ArrayList<String> stackLines = new ArrayList<>();
+		ArrayList<Move> moves = new ArrayList<>();
+		for (String line : lines) {
+			// skip the blank line
+			if (AdventOfCode.isBlankString(line)==true) {
+				continue;
+			}
+			// skip the # of piles line
+			if (line.startsWith(" 1")) {
+				processStacks = false;
+				line = line.replaceAll("\\s+","");
+				totalPiles = Integer.parseInt(AdventOfCode.lastXChars(line,1));
+				continue;
+			}
+			if (processStacks) {
+				LOG.info("line: " + line);
+				line = line.replaceAll("\\]+","");
+				LOG.info("line: " + line);
+				line = line.replaceAll("\\s\\[+","");
+				LOG.info("line: " + line);
+				line = line.replaceAll("\\[+","");
+				LOG.info("line: " + line);
+
+				stackLines.add(line);
 			} else {
-				LOG.info(title + "contains second in first!");
-				return result;
+				moves.add(new Move(line));
 			}
-		} else {
-			LOG.info(title + "contains first in second !");
-			return result;
 		}
-	}
-	public int[] convertSection(String input) {
-		List<String> split = Pattern.compile("-").splitAsStream(input).toList();
-		int start = Integer.parseInt(split.get(0));
-		int end = Integer.parseInt(split.get(1));
-		
-		int[] sections = new int[end-start+1];
-		int loop = 0;
-		for (int i = start; i <= end; i++) {
-			sections[loop] = i;
-			loop++;
+
+		// process stackLines in reverse
+		Collections.reverse(stackLines);
+		// init array of piles
+		ArrayList<Pile> piles = new ArrayList<>();
+		for (int i = 0; i < totalPiles; i++) {
+//			piles.add(i,null);
 		}
-		return sections;
-	}
-	public int fullyContains(int[] first, int[] second) {
-		// first 234 - second 12345
-		first: for (int i = 0; i < first.length; i++) {
-			for (int j = 0; j < second.length; j++) {
-				if (first[i] == second[j]) {
-					continue first;
-				}
+		// stack the piles for each line
+		count = 0;
+		String crate = "";
+		for (String stackLine : stackLines) {
+			count++;
+			// for all piles in a row eg "  A" or " ZZZ"
+			LOG.info("stackLine: " + stackLine);
+			for (int i = 0; i < stackLine.length(); i++) {
+				crate = stackLine.substring(i,i+1);
+				LOG.info("crate: " + crate);
+//				Pile pile = piles.get(i);
+//				pile.addCrate(crate);
+//				piles.set(i, pile);
 			}
-			// no continue so i is not in j
-			return 0;
 		}
-		return 1;
+
+		for (Pile pile : piles) {
+			LOG.info("pile: " + pile.pile + " crates: " +pile.crates);
+		}
+		return 0;
 	}
-	
+
+//			for (int i = 0; i < inventory.size(); i++) {
+
+	public HashMap<Integer, String> convertStackLines(List<String> lines, int total) {
+		return null;
+	}
+
 	public int solutionPartTwo(List<String> lines) {
 		
 		LOG.info(title + "lines: " + lines.size() + lineSeparator);
@@ -101,33 +136,10 @@ public class Day5 implements AdventOfCode {
 					                     .compile(",")
 					                     .splitAsStream(line)
 					                     .collect(Collectors.toList());
-			sum += partlyoverlaps(split);
-			LOG.info(title + "cumulative: " + sum + lineSeparator);
+//			sum += partlyoverlaps(split);
+//			LOG.info(title + "cumulative: " + sum + lineSeparator);
 		}
 		LOG.info("answer: " + sum);
 		return sum;
-	}
-	
-	public int partlyoverlaps(List<String> sectionRanges) {
-		String first = sectionRanges.get(0);
-		String second = sectionRanges.get(1);
-		LOG.info(title + "first : [" + first + "] second: [" + second +
-				         "]");
-		
-		int result = overlap(convertSection(first), convertSection(second));
-		return result;
-	}
-	
-	public int overlap(int[] first, int[] second) {
-		// first 234 - second 12345
-		first: for (int i = 0; i < first.length; i++) {
-			for (int j = 0; j < second.length; j++) {
-				if (first[i] == second[j]) {
-					LOG.info(title + "overlap found !");
-					return 1;
-				}
-			}
-		}
-		return 0;
 	}
 }
