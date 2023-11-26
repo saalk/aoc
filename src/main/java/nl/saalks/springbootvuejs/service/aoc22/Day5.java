@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -44,18 +43,41 @@ public class Day5 implements AdventOfCode {
 	}
 	class Pile {
 		int pile; // 1 = left column
-		String crates;
-		Pile(int pile, String crates){
-			pile = pile;
-			crates = crates;
+		String crates = "";
+		Pile(int pile){
+			this.pile = pile;
 		}
 		void addCrate(String crate) {
-			crates.concat(crate);
+			if (crate.isBlank()) return;
+			this.crates = this.crates.concat(crate);
+//			LOG.info("addCrate after[" + this.pile + "], crates[" +this.crates+"]");
+
+		}
+		String removeCrates(int number) {
+
+			if (number==0) return null;
+			int pileLenght = this.crates.length();
+			String crates = this.crates.substring(pileLenght-number,pileLenght);
+			this.crates = this.crates.substring(0,pileLenght-number);
+
+//			LOG.info("removeCrates after[" + this.pile + "], crates[" + this.crates+"]");
+			return crates;
+		}
+
+		String giveTopCrate() {
+			int pileLenght = this.crates.length();
+			if (pileLenght==0) return "";
+
+			return this.crates.substring(
+					pileLenght-1,
+					pileLenght
+					);
+
 		}
 	}
+	ArrayList<Pile> piles = new ArrayList<>();
 	static String title = "SupplyStack - part 1: ";
-	
-	public int solutionPartOne(List<String> lines) {
+	public String solutionPartOne(List<String> lines) {
 
 		// process all lines
 		int count = 0;
@@ -76,15 +98,7 @@ public class Day5 implements AdventOfCode {
 				continue;
 			}
 			if (processStacks) {
-				LOG.info("line: " + line);
-				line = line.replaceAll("\\]+","");
-				LOG.info("line: " + line);
-				line = line.replaceAll("\\s\\[+","");
-				LOG.info("line: " + line);
-				line = line.replaceAll("\\[+","");
-				LOG.info("line: " + line);
-
-				stackLines.add(line);
+				stackLines.add(convertStackLine(line));
 			} else {
 				moves.add(new Move(line));
 			}
@@ -93,9 +107,8 @@ public class Day5 implements AdventOfCode {
 		// process stackLines in reverse
 		Collections.reverse(stackLines);
 		// init array of piles
-		ArrayList<Pile> piles = new ArrayList<>();
 		for (int i = 0; i < totalPiles; i++) {
-//			piles.add(i,null);
+			piles.add(i,new Pile(i+1));
 		}
 		// stack the piles for each line
 		count = 0;
@@ -106,23 +119,51 @@ public class Day5 implements AdventOfCode {
 			LOG.info("stackLine: " + stackLine);
 			for (int i = 0; i < stackLine.length(); i++) {
 				crate = stackLine.substring(i,i+1);
-				LOG.info("crate: " + crate);
-//				Pile pile = piles.get(i);
-//				pile.addCrate(crate);
-//				piles.set(i, pile);
+				Pile pile = piles.get(i);
+				pile.addCrate(crate);
+				piles.set(i, pile);
 			}
 		}
 
 		for (Pile pile : piles) {
-			LOG.info("pile: " + pile.pile + " crates: " +pile.crates);
+			LOG.info("pile[" + pile.pile + "], crates[" +pile.crates+"]");
 		}
-		return 0;
+		for (Move move : moves) {
+			LOG.info("move quantity[" + move.quantity + "], " + "move fromStack[" + move.fromStack + "], " + "move " +
+					"toStack[" + move.toStack + "]");
+		}
+
+		// move the stack
+		for (Move move : moves) {
+//			LOG.info("move quantity[" + move.quantity + "], " + "move fromStack[" + move.fromStack + "], " + "move " +
+//					"toStack[" + move.toStack + "]");
+			String crates = piles.get(move.fromStack-1).removeCrates(move.quantity);
+			// reverse crates
+			StringBuffer sbr = new StringBuffer(crates);
+			// To reverse the string
+			sbr.reverse();
+			piles.get(move.toStack-1).addCrate(String.valueOf(sbr));
+
+//			for (Pile pile : piles) {
+//				LOG.info("pile[" + pile.pile + "], crates[" +pile.crates+"]");
+//			}
+		}
+		String topCrates ="";
+		for (Pile pile : piles) {
+			topCrates = topCrates.concat(pile.giveTopCrate());
+		}
+		LOG.info("topCrates : " + topCrates);
+		return topCrates;
 	}
 
-//			for (int i = 0; i < inventory.size(); i++) {
-
-	public HashMap<Integer, String> convertStackLines(List<String> lines, int total) {
-		return null;
+	public String convertStackLine(String line) {
+		int totalPiles = (line.length()+1)/4;
+		String result = "";
+		for (int i = 0; i < totalPiles; i++) {
+			int position = 1+(i*4); // 0,1,2
+			result = result.concat(line.substring(position,position+1));
+		}
+		return result;
 	}
 
 	public int solutionPartTwo(List<String> lines) {

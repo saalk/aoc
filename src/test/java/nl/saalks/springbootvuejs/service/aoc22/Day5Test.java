@@ -25,8 +25,8 @@ class Day5Test implements AdventOfCodeTest {
 	void part1WithExampleFile() {
 		
 		List<String> lines = readFile("aoc22/day5example.txt");
-		int score = fixture.solutionPartOne(lines);
-//		assertTrue("CampCleanup: ", score == 2);
+		String score = fixture.solutionPartOne(lines);
+		assertTrue("SupplyStack: ", score.equals("CMZ"));
 	}
 	
 	@Test
@@ -34,8 +34,8 @@ class Day5Test implements AdventOfCodeTest {
 	void part1WithRealFile() {
 		
 		List<String> lines = readFile("aoc22/day5.txt");
-		int score = fixture.solutionPartOne(lines);
-		assertTrue("Result: ", score == 538);
+		String score = fixture.solutionPartOne(lines);
+		assertTrue("Result: ", score.equals("QGTHFZBHV"));
 	}
 	
 	@Test
