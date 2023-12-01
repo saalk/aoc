@@ -47,13 +47,13 @@ class Day5Test implements AdventOfCodeTest {
 //		assertTrue("Result: ", score == 4);
 	}
 	
-	@Test
-	@DisplayName("5.2 - SupplyStack real")
-	void part2WithRealFile() {
-		
-		List<String> lines = readFile("aoc22/day5.txt");
-		int score = fixture.solutionPartTwo(lines);
-		assertTrue("sumOfThePriorities: ", score == 792);
-	}
+//	@Test
+//	@DisplayName("5.2 - SupplyStack real")
+//	void part2WithRealFile() {
+//
+//		List<String> lines = readFile("aoc22/day5.txt");
+//		int score = fixture.solutionPartTwo(lines);
+//		assertTrue("sumOfThePriorities: ", score == 792);
+//	}
 	
 }

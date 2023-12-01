@@ -1,22 +1,14 @@
 package nl.saalks.springbootvuejs.service.aoc23;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import nl.saalks.springbootvuejs.service.AdventOfCode;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-
-import static nl.saalks.springbootvuejs.service.AdventOfCode.isBlankString;
 
 @Service
-public class Day1 implements AdventOfCode {
+public class Day2 implements AdventOfCode {
     public int sumCalibrationValues(List<String> inventory) {
 
         LOG.info("sumCalibrationValues - total lines: " + inventory.size());
