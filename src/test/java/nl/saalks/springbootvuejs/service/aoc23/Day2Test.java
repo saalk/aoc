@@ -56,7 +56,7 @@ class Day2Test implements AdventOfCodeTest {
 
         List<String> lines = readFile("aoc23/day2.txt");
         int[] sum = fixture.sumIDsGames(lines);
-        int answer = 55093;
+        int answer = 62811;
         assertTrue(String.format("outcome should be [%d] not [%d]",answer, sum[1]),
                 sum[1] == answer);
     }
