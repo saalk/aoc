@@ -12,47 +12,52 @@ import static org.springframework.test.util.AssertionErrors.assertTrue;
 
 class Day2Test implements AdventOfCodeTest {
 
-    Day1 fixture;
+    Day2 fixture;
 
     @BeforeEach
     void setUp() {
-        fixture = new Day1();
+        fixture = new Day2();
     }
 
     @Test
     @DisplayName("2.1 - sum of all of the calibration values")
-    void sumCalibrationValuesWithExample() {
-
+    void sumIDsGamesWithExample() throws Exception {
         @NotNull List<String> lines = readFile("aoc23/day2example.txt");
-        int sum = fixture.sumCalibrationValues(lines);
-        assertTrue("sum of all of the calibration values should be 142", sum == 142);
+        int[] sum = fixture.sumIDsGames(lines);
+        int answer = 8;
+        assertTrue(String.format("outcome should be [%d] not [%d]",answer, sum[0]),
+                sum[0] == answer);
     }
 
     @Test
     @DisplayName("2.1 - sum of all of the calibration values")
-    void sumCalibrationValuesWithRealInputFile() {
+    void sumIDsGamesWithRealInputFile() throws Exception {
 
         List<String> lines = readFile("aoc23/day2.txt");
-        int sum = fixture.sumCalibrationValues(lines);
-        assertTrue("sum of all of the calibration values should be 55002", sum == 55002);
+        int[] sum = fixture.sumIDsGames(lines);
+        int answer = 2551;
+        assertTrue(String.format("outcome should be [%d] not [%d]",answer, sum[0]),
+                sum[0] == answer);
     }
 
     @Test
     @DisplayName("2.2 - sumCalibrationValues")
-    void totalsumCalibrationValuesWithExampleInputFile() {
+    void totalsumCalibrationValuesWithExampleInputFile() throws Exception {
 
         List<String> lines = readFile("aoc23/day2example.txt");
-        int sum = fixture.sumCalibrationValuesWritten(lines);
-        int answer = 281;
-        assertTrue(String.format("outcome should be [%d] not [%d]",answer, sum),sum == answer);
+        int[] sum = fixture.sumIDsGames(lines);
+        int answer = 2286;
+        assertTrue(String.format("outcome should be [%d] not [%d]",answer, sum[1]),
+                sum[1] == answer);
     }
     @Test
     @DisplayName("2.2 - sumCalibrationValues")
-    void totalsumCalibrationValuesWithRealInputFile() {
+    void totalsumCalibrationValuesWithRealInputFile() throws Exception {
 
         List<String> lines = readFile("aoc23/day2.txt");
-        int sum = fixture.sumCalibrationValuesWritten(lines);
+        int[] sum = fixture.sumIDsGames(lines);
         int answer = 55093;
-        assertTrue(String.format("outcome should be [%d] not [%d]",answer, sum),sum == answer);
+        assertTrue(String.format("outcome should be [%d] not [%d]",answer, sum[1]),
+                sum[1] == answer);
     }
 }
